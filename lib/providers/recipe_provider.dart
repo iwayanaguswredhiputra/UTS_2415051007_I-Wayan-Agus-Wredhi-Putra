@@ -1,67 +1,39 @@
 import 'package:flutter/material.dart';
 import '../models/recipe_model.dart';
-import '../models/cookbook_model.dart';
-import '../repositories/recipe_repository.dart';
 
 class RecipeProvider with ChangeNotifier {
-  final RecipeRepository _repository = RecipeRepository();
+  // Contoh daftar resep sementara (dummy data) sebelum terhubung ke database
+  final List<RecipeModel> _recipes = [
+    RecipeModel(
+      idMeal: '1',
+      strMeal: 'Ayam Betutu Khas Bali',
+      strCategory: 'Makanan Utama',
+      strMealThumb: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1',
+      strInstructions: 'Lumuri ayam dengan bumbu genep khas Bali, bungkus dengan daun pisang, lalu panggang hingga matang.',
+    ),
+    RecipeModel(
+      idMeal: '2',
+      strMeal: 'Sate Lilit Ayam',
+      strCategory: 'Makanan Utama',
+      strMealThumb: 'https://images.unsplash.com/photo-1544025162-d76694265947',
+      strInstructions: 'Campurkan daging ayam cincang dengan kelapa parut dan bumbu rempah, lilitkan pada tusuk sate, lalu bakar.',
+    ),
+  ];
 
-  List<RecipeModel> _apiRecipes = [];
-  List<CookbookModel> _cookbookItems = [];
+  List<RecipeModel> get recipes => _recipes;
+
   bool _isLoading = false;
-  String _errorMessage = '';
-
-  List<RecipeModel> get apiRecipes => _apiRecipes;
-  List<CookbookModel> get cookbookItems => _cookbookItems;
   bool get isLoading => _isLoading;
-  String get errorMessage => _errorMessage;
 
-  // Fetch API Catalog
-  Future<void> fetchApiRecipes(String query) async {
-    _isLoading = true;
-    _errorMessage = '';
+  // Method untuk mengubah status loading saat mengambil data
+  void setLoading(bool value) {
+    _isLoading = value;
     notifyListeners();
-
-    try {
-      _apiRecipes = await _repository.getRecipes(query);
-    } catch (e) {
-      _errorMessage = e.toString();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
   }
 
-  // Fetch Supabase Cookbook
-  Future<void> fetchCookbook() async {
-    _isLoading = true;
+  // Method untuk menambah resep baru ke state
+  void addRecipe(RecipeModel recipe) {
+    _recipes.add(recipe);
     notifyListeners();
-
-    try {
-      _cookbookItems = await _repository.getCookbook();
-    } catch (e) {
-      _errorMessage = e.toString();
-    } finally {
-      _isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  // Add to Cookbook
-  Future<void> addCookbook(CookbookModel item) async {
-    await _repository.addRecipeToCookbook(item);
-    await fetchCookbook();
-  }
-
-  // Update Cookbook
-  Future<void> updateCookbook(int id, Map<String, dynamic> data) async {
-    await _repository.updateCookbook(id, data);
-    await fetchCookbook();
-  }
-
-  // Delete from Cookbook
-  Future<void> deleteCookbook(int id) async {
-    await _repository.deleteCookbook(id);
-    await fetchCookbook();
   }
 }

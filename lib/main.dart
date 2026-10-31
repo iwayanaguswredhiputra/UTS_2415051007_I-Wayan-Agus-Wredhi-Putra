@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uts_2415051007_iwayanaguswredhiputra/screens/home_screen.dart';
 import 'providers/recipe_provider.dart';
+import 'screens/home_screen.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Supabase.initialize(
-    url: 'https://uuccwwybyracekitklyl.supabase.co',
-    publishableKey: 'sb_publishable_Mol0d8yFFNJCW89x8Rm1WA_643Mq0uk',
-  );
-
-  runApp(const MyApp());
+void main() {
+  runApp(const RecipeBookApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class RecipeBookApp extends StatelessWidget {
+  const RecipeBookApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +19,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'RecipeBook ID',
         theme: ThemeData(
-          primarySwatch: Colors.orange,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 255, 156, 43),
+          ),
           useMaterial3: true,
         ),
         home: const HomeScreen(),

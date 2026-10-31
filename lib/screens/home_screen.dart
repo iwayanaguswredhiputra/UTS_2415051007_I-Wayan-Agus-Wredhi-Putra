@@ -57,8 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     NavigationRailDestination(
                       icon: Icon(Icons.info_outline),
-                      selectedIcon: Icon(Icons.info),
-                      label: Text('Tentang'),
+                      selectedIcon: Icon(Icons.person),
+                      label: Text('Profil Saya'),
                     ),
                   ],
                 ),
@@ -90,8 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: 'Buku Resep',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.info),
-                  label: 'Tentang',
+                  icon: Icon(Icons.person),
+                  label: 'Profil Saya',
                 ),
               ],
             ),

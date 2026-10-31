@@ -7,52 +7,98 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Profile'),
-        backgroundColor: Color.fromARGB(255, 255, 156, 43),
+        title: const Text('Profil Saya'),
+        backgroundColor: const Color.fromARGB(255, 255, 156, 43),
         foregroundColor: Colors.white,
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          bool isWide = constraints.maxWidth > 600;
-          return SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 20),
+            Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 156, 43),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            size: 72,
+                            color: Color.fromARGB(255, 235, 231, 226),
+                          ),
+                        ),
+            const SizedBox(height: 16),
+            const Text(
+              'I Wayan Agus Wredhi Putra',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Mahasiswa Kelas PTI 5B',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Divider(),
+            const SizedBox(height: 16),
+
+            Card(
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      radius: isWide ? 60 : 50,
-                      backgroundColor: Color.fromARGB(255, 255, 156, 43),
-                      foregroundColor: Colors.white,
-                      child: const Icon(Icons.person, size: 50),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'I Wayan Agus Wredhi Putra',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'NIM: 2415051007',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Pendidikan Teknik Informatika',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 12),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
                     Text(
-                      isWide ? '(Tampilan Responsif: Layar Lebar)' : '(Tampilan Responsif: Ponsel)',
-                      style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.primary),
+                      'Identitas Pengguna',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 255, 156, 43),
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(Icons.badge, color: Colors.orange),
+                      title: Text('2415051007'),
+                      subtitle: Text('NIM'),
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(Icons.school, color: Colors.orange),
+                      title: Text('Pendidikan Teknik Informatika'),
+                      subtitle: Text('Program Studi'),
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(Icons.business, color: Colors.orange),
+                      title: Text('Fakultas Teknik dan Kejuruan'),
+                      subtitle: Text('Fakultas'),
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Icon(Icons.account_balance, color: Colors.orange),
+                      title: Text('Universitas Pendidikan Ganesha'),
+                      subtitle: Text('Institusi'),
                     ),
                   ],
                 ),
               ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
