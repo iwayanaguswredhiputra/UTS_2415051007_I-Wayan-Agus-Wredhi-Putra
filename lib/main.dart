@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uts_2415051007_iwayanaguswredhiputra/screens/cookbook_screen.dart';
+import 'package:uts_2415051007_iwayanaguswredhiputra/screens/home_screen.dart';
 import 'providers/recipe_provider.dart';
 
 void main() async {
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.orange,
           useMaterial3: true,
         ),
-        home: const CookbookScreen(),
+        home: const HomeScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );
