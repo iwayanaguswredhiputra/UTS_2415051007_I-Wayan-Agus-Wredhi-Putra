@@ -4,6 +4,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'providers/recipe_provider.dart';
 import 'providers/cookbook_provider.dart'; 
 import 'screens/home_screen.dart';
+import 'repositories/recipe_repository.dart';
+import 'services/recipe_api_service.dart';
+import 'services/supabase_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,10 +23,18 @@ class RecipeBookApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final apiService = ApiService();
+    final supabaseService = SupabaseService();
+
+    final recipeRepository = RecipeRepository(
+      apiService: apiService,
+      supabaseService: supabaseService,
+    );
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RecipeProvider()),
-        ChangeNotifierProvider(create: (_) => CookbookProvider()), 
+        ChangeNotifierProvider(create: (_) => CookbookProvider(recipeRepository)),
       ],
       child: MaterialApp(
         title: 'RecipeBook ID',
