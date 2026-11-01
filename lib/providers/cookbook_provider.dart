@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import '../models/cookbook_model.dart';
-import '../services/supabase_service.dart';
-import '../models/recipe_model.dart';
+import '../repositories/recipe_repository.dart';
 
-class CookbookProvider with ChangeNotifier {
-  final SupabaseService _supabaseService = SupabaseService();
-  
+class CookbookProvider extends ChangeNotifier {
+  final RecipeRepository repository;
+
+  CookbookProvider(this.repository);
+
   List<CookbookModel> _cookbookItems = [];
   bool _isLoading = false;
 
@@ -17,36 +18,24 @@ class CookbookProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _cookbookItems = await _supabaseService.getCookbookItems();
+      _cookbookItems = await repository.getCookbookItems();
     } catch (e) {
       debugPrint('Error fetching cookbook: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+  Future<bool> saveToCookbook(CookbookModel item) async {
+    bool isExist = _cookbookItems.any((element) => element.recipeId == item.recipeId);
+    if (isExist) {
+      return false; 
     }
 
-    _isLoading = false;
-    notifyListeners();
-  }
-
-  Future<bool> saveToCookbook({
-    required RecipeModel recipe,
-    String note = '',
-    String difficulty = 'Sedang',
-    String status = 'Ingin Dicoba',
-  }) async {
     try {
-      final isExist = _cookbookItems.any((item) => item.recipeId == recipe.idMeal);
-      if (isExist) {
-        return false; 
-      }
-
-      await _supabaseService.addRecipeFromApi(
-        recipe: recipe,
-        note: note,
-        difficulty: difficulty,
-        status: status,
-      );
-      
-      await fetchCookbook();
-      return true; 
+      await repository.addRecipeToCookbook(item);
+      await fetchCookbook(); 
+      return true;
     } catch (e) {
       debugPrint('Error saving recipe: $e');
       rethrow;
