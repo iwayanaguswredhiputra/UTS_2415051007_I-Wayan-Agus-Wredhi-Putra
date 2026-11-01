@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       label: Text('Buku Resep'),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(Icons.info_outline),
+                      icon: Icon(Icons.person),
                       selectedIcon: Icon(Icons.person),
                       label: Text('Profil Saya'),
                     ),
