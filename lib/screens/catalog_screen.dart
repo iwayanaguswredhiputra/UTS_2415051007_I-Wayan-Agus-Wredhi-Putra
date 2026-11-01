@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/recipe_provider.dart';
-import '../screens/detail_screen.dart';
+import 'detail_screen.dart';
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -24,7 +24,6 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Mengambil data resep dari RecipeProvider
     final recipeProvider = Provider.of<RecipeProvider>(context);
     final allRecipes = recipeProvider.recipes;
 

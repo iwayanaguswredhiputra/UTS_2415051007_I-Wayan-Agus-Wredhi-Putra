@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; 
 import 'providers/recipe_provider.dart';
+import 'providers/cookbook_provider.dart'; 
 import 'screens/home_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'https://uuccwwybyracekitklyl.supabase.co',
+    publishableKey: 'sb_publishable_Mol0d8yFFNJCW89x8Rm1WA_643Mq0uk',
+  );
   runApp(const RecipeBookApp());
 }
 
@@ -15,6 +23,7 @@ class RecipeBookApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RecipeProvider()),
+        ChangeNotifierProvider(create: (_) => CookbookProvider()), 
       ],
       child: MaterialApp(
         title: 'RecipeBook ID',

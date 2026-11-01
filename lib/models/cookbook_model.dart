@@ -8,6 +8,7 @@ class CookbookModel {
   final String difficulty;
   final String status;
   final DateTime? createdAt;
+  final String instructions;
 
   CookbookModel({
     this.id,
@@ -19,6 +20,7 @@ class CookbookModel {
     required this.difficulty,
     required this.status,
     this.createdAt,
+    required this.instructions,
   });
 
   factory CookbookModel.fromJson(Map<String, dynamic> json) {
@@ -34,6 +36,7 @@ class CookbookModel {
       createdAt: json['created_at'] != null 
           ? DateTime.parse(json['created_at']) 
           : null,
+      instructions: json['instructions'] ?? '',
     );
   }
 
@@ -46,6 +49,7 @@ class CookbookModel {
       'note': note,
       'difficulty': difficulty,
       'status': status,
+      'instructions': instructions,
     };
   }
 }
