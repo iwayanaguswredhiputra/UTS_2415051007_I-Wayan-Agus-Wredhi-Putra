@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/recipe_model.dart';
 import '../models/cookbook_model.dart';
 import '../providers/cookbook_provider.dart';
+import '../widgets/custom_button.dart';
 
 class DetailScreen extends StatelessWidget {
   final RecipeModel recipe;
@@ -133,55 +134,47 @@ class DetailScreen extends StatelessWidget {
   }
 
   Widget _buildSaveButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        onPressed: () async {
-          try {
-            final provider = Provider.of<CookbookProvider>(context, listen: false);
-            
-            final newItem = CookbookModel(
-              recipeId: recipe.idMeal,
-              recipeName: recipe.strMeal,
-              imageUrl: recipe.strMealThumb,
-              category: recipe.strCategory, 
-              instructions: recipe.strInstructions,
-              difficulty: 'Sedang',
-              status: 'Ingin Dicoba',
-              note: 'Resep favorit pilihan saya',
-            );
+    return CustomButton(
+      label: 'Simpan ke Buku Resep',
+      icon: Icons.bookmark_add,
+      onPressed: () async {
+        try {
+          final provider = Provider.of<CookbookProvider>(context, listen: false);
+          
+          final newItem = CookbookModel(
+            recipeId: recipe.idMeal,
+            recipeName: recipe.strMeal,
+            imageUrl: recipe.strMealThumb,
+            category: recipe.strCategory, 
+            instructions: recipe.strInstructions,
+            difficulty: 'Sedang',
+            status: 'Ingin Dicoba',
+            note: 'Resep favorit pilihan saya',
+          );
 
-            bool success = await provider.saveToCookbook(newItem);
+          bool success = await provider.saveToCookbook(newItem);
 
-            if (!context.mounted) return;
+          if (!context.mounted) return;
 
-            if (success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Berhasil disimpan ke Buku Resep!')),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Resep ini sudah ada di Buku Resep Anda!'),
-                  backgroundColor: Colors.orange,
-                ),
-              );
-            }
-          } catch (e) {
-            if (!context.mounted) return;
+          if (success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Gagal menyimpan resep: $e')),
+              const SnackBar(content: Text('Berhasil disimpan ke Buku Resep!')),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Resep ini sudah ada di Buku Resep Anda!'),
+                backgroundColor: Colors.orange,
+              ),
             );
           }
-        },
-        icon: const Icon(Icons.bookmark_add),
-        label: const Text('Simpan ke Buku Resep'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 255, 156, 43),
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 12),
-        ),
-      ),
+        } catch (e) {
+          if (!context.mounted) return;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Gagal menyimpan resep: $e')),
+          );
+        }
+      },
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/recipe_provider.dart';
 import 'detail_screen.dart';
+import '../widgets/recipe_card.dart';
+import '../widgets/empty_state_widget.dart';
 
 class CatalogScreen extends StatefulWidget {
   const CatalogScreen({super.key});
@@ -89,8 +91,9 @@ class _CatalogScreenState extends State<CatalogScreen> {
                     ),
                   )
                 : filteredRecipes.isEmpty
-                    ? const Center(
-                        child: Text('Resep tidak ditemukan.'),
+                    ? const EmptyStateWidget(
+                        message: 'Resep tidak ditemukan.',
+                        icon: Icons.search_off,
                       )
                     : GridView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -103,67 +106,19 @@ class _CatalogScreenState extends State<CatalogScreen> {
                         itemCount: filteredRecipes.length,
                         itemBuilder: (context, index) {
                           final recipe = filteredRecipes[index];
-                          return Card(
-                            elevation: 2,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DetailScreen(recipe: recipe),
-                                  ),
-                                );
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Image.network(
-                                      recipe.strMealThumb,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) =>
-                                          Container(
-                                        color: Colors.grey[300],
-                                        child: const Icon(Icons.broken_image,
-                                            color: Colors.grey),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          recipe.strMeal,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          'Kategori: ${recipe.strCategory}',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey[600],
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                          
+                          return RecipeCard(
+                            title: recipe.strMeal,
+                            category: recipe.strCategory,
+                            imageUrl: recipe.strMealThumb,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DetailScreen(recipe: recipe),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),
