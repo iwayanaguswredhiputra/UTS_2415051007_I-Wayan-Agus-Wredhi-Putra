@@ -177,6 +177,48 @@ void _showEditDialog(BuildContext context, CookbookModel item) {
   );
 }
 
+void _showDeleteDialog(BuildContext context, CookbookModel item) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Hapus Resep'),
+      content: Text('Apakah Anda yakin ingin menghapus "${item.recipeName}" dari buku resep?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Batal'),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+          ),
+          onPressed: () async {
+            try {
+              final provider = Provider.of<CookbookProvider>(context, listen: false);
+              
+              await provider.deleteCookbookItem(item.id.toString());
+
+              if (!context.mounted) return;
+              Navigator.pop(context); 
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Resep berhasil dihapus!')),
+              );
+            } catch (e) {
+              if (!context.mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Gagal menghapus: $e')),
+              );
+            }
+          },
+          child: const Text('Hapus'),
+        ),
+      ],
+    ),
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -225,42 +267,52 @@ void _showEditDialog(BuildContext context, CookbookModel item) {
           }
 
           return ListView.builder(
-            itemCount: provider.cookbookItems.length,
-            itemBuilder: (context, index) {
-              final item = provider.cookbookItems[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      item.imageUrl,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.broken_image, size: 50),
-                    ),
-                  ),
-                  title: Text(
-                    item.recipeName,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text('Catatan: ${item.note}'),
-                  onTap: () {
-                    _showRecipeDetail(context, item);
-                  },
-                  trailing: IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.orange),
-                        onPressed: () => _showEditDialog(context, item),
-                        tooltip: 'Edit Resep',
+              itemCount: provider.cookbookItems.length,
+              itemBuilder: (context, index) {
+                  final item = provider.cookbookItems[index];
+                  return Card(
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: ListTile(
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          item.imageUrl,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.broken_image, size: 50),
+                        ),
                       ),
-                    ),
-                );
-            },
-          );
-        },
-      ),
-    );
-  }
+                      title: Text(
+                        item.recipeName,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text('Catatan: ${item.note}'),
+                      onTap: () {
+                        _showRecipeDetail(context, item);
+                      },
+                      trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                                IconButton(
+                                  icon: const Icon(Icons.edit, color: Colors.orange),
+                                  onPressed: () => _showEditDialog(context, item),
+                                  tooltip: 'Edit Resep',
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.delete, color: Colors.red),
+                                  onPressed: () => _showDeleteDialog(context, item),
+                                  tooltip: 'Hapus Resep',
+                                ),
+                              ],
+                            ),
+                        ),
+                    );
+                },
+            );
+          },
+        ),
+      );
+    }
 }

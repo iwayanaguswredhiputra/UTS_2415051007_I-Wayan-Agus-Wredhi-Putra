@@ -58,4 +58,19 @@ class CookbookProvider extends ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> deleteCookbookItem(String id) async {
+    try {
+      await Supabase.instance.client
+          .from('my_cookbook') 
+          .delete()
+          .eq('id', id);    
+
+      await fetchCookbook();   
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Gagal menghapus resep: $e');
+      rethrow;
+    }
+  }
 }
