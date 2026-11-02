@@ -80,6 +80,103 @@ class _CookbookScreenState extends State<CookbookScreen> {
     );
   }
 
+void _showEditDialog(BuildContext context, CookbookModel item) {
+  final noteController = TextEditingController(text: item.note);
+  String selectedStatus = item.status;
+  String selectedDifficulty = item.difficulty;
+
+  showDialog(
+    context: context,
+    builder: (context) => StatefulBuilder(
+      builder: (context, setStateDialog) => AlertDialog(
+        title: const Text('Edit Buku Resep'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: noteController,
+                decoration: const InputDecoration(
+                  labelText: 'Catatan Pribadi',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 2,
+              ),
+              const SizedBox(height: 16),
+              
+              DropdownButtonFormField<String>(
+                initialValue: selectedStatus,
+                decoration: const InputDecoration(
+                  labelText: 'Status Resep',
+                  border: OutlineInputBorder(),
+                ),
+                items: ['Ingin Dicoba', 'Sudah Dicoba', 'Favorit'].map((status) {
+                  return DropdownMenuItem(value: status, child: Text(status));
+                }).toList(),
+                onChanged: (val) {
+                  if (val != null) setStateDialog(() => selectedStatus = val);
+                },
+              ),
+              const SizedBox(height: 16),
+
+              DropdownButtonFormField<String>(
+                initialValue: selectedDifficulty,
+                decoration: const InputDecoration(
+                  labelText: 'Tingkat Kesulitan',
+                  border: OutlineInputBorder(),
+                ),
+                items: ['Mudah', 'Sedang', 'Sulit'].map((diff) {
+                  return DropdownMenuItem(value: diff, child: Text(diff));
+                }).toList(),
+                onChanged: (val) {
+                  if (val != null) setStateDialog(() => selectedDifficulty = val);
+                },
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 255, 156, 43),
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () async {
+              try {
+                final provider = Provider.of<CookbookProvider>(context, listen: false);
+                
+                await provider.updateCookbookItem(item.id.toString(), {
+                  'note': noteController.text,
+                  'status': selectedStatus,
+                  'difficulty': selectedDifficulty,
+                });
+
+                if (!context.mounted) return;
+                Navigator.pop(context); 
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Resep berhasil diperbarui!')),
+                );
+              } catch (e) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Gagal memperbarui: $e')),
+                );
+              }
+            },
+            child: const Text('Simpan'),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,8 +250,13 @@ class _CookbookScreenState extends State<CookbookScreen> {
                   onTap: () {
                     _showRecipeDetail(context, item);
                   },
-                ),
-              );
+                  trailing: IconButton(
+                        icon: const Icon(Icons.edit, color: Colors.orange),
+                        onPressed: () => _showEditDialog(context, item),
+                        tooltip: 'Edit Resep',
+                      ),
+                    ),
+                );
             },
           );
         },

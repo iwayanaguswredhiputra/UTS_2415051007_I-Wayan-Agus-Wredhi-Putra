@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'; 
 import '../models/cookbook_model.dart';
 import '../repositories/recipe_repository.dart';
 
@@ -26,6 +27,7 @@ class CookbookProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
   Future<bool> saveToCookbook(CookbookModel item) async {
     bool isExist = _cookbookItems.any((element) => element.recipeId == item.recipeId);
     if (isExist) {
@@ -38,6 +40,21 @@ class CookbookProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       debugPrint('Error saving recipe: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateCookbookItem(String id, Map<String, dynamic> updatedData) async {
+    try {
+      await Supabase.instance.client
+          .from('my_cookbook')
+          .update(updatedData) 
+          .eq('id', id);      
+
+      await fetchCookbook();   
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Gagal memperbarui resep: $e');
       rethrow;
     }
   }
