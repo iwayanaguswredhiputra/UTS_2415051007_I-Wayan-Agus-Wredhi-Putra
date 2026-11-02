@@ -29,38 +29,47 @@ class _HomeScreenState extends State<HomeScreen> {
           return Scaffold(
             body: Row(
               children: [
-                NavigationRail(
-                  selectedIndex: _currentIndex,
-                  onDestinationSelected: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                  labelType: NavigationRailLabelType.all,
-                  selectedIconTheme: const IconThemeData(
-                    color: Color.fromARGB(255, 255, 156, 43),
+                SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: NavigationRail(
+                        selectedIndex: _currentIndex,
+                        onDestinationSelected: (index) {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                        labelType: NavigationRailLabelType.all,
+                        selectedIconTheme: const IconThemeData(
+                          color: Color.fromARGB(255, 255, 156, 43),
+                        ),
+                        selectedLabelTextStyle: const TextStyle(
+                          color: Color.fromARGB(255, 255, 156, 43),
+                          fontWeight: FontWeight.bold,
+                        ),
+                        destinations: const [
+                          NavigationRailDestination(
+                            icon: Icon(Icons.explore_outlined),
+                            selectedIcon: Icon(Icons.explore),
+                            label: Text('Katalog'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.book_outlined),
+                            selectedIcon: Icon(Icons.book),
+                            label: Text('Buku Resep'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.person),
+                            selectedIcon: Icon(Icons.person),
+                            label: Text('Profil Saya'),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  selectedLabelTextStyle: const TextStyle(
-                    color: Color.fromARGB(255, 255, 156, 43),
-                    fontWeight: FontWeight.bold,
-                  ),
-                  destinations: const [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.explore_outlined),
-                      selectedIcon: Icon(Icons.explore),
-                      label: Text('Katalog'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.book_outlined),
-                      selectedIcon: Icon(Icons.book),
-                      label: Text('Buku Resep'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.person),
-                      selectedIcon: Icon(Icons.person),
-                      label: Text('Profil Saya'),
-                    ),
-                  ],
                 ),
                 const VerticalDivider(thickness: 1, width: 1),
                 Expanded(

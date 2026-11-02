@@ -89,52 +89,52 @@ void _showEditDialog(BuildContext context, CookbookModel item) {
     context: context,
     builder: (context) => StatefulBuilder(
       builder: (context, setStateDialog) => AlertDialog(
+        scrollable: true,
+        insetPadding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10.0), 
         title: const Text('Edit Buku Resep'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: noteController,
-                decoration: const InputDecoration(
-                  labelText: 'Catatan Pribadi',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 2,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: noteController,
+              decoration: const InputDecoration(
+                labelText: 'Catatan Pribadi',
+                border: OutlineInputBorder(),
               ),
-              const SizedBox(height: 16),
-              
-              DropdownButtonFormField<String>(
-                initialValue: selectedStatus,
-                decoration: const InputDecoration(
-                  labelText: 'Status Resep',
-                  border: OutlineInputBorder(),
-                ),
-                items: ['Ingin Dicoba', 'Sudah Dicoba', 'Favorit'].map((status) {
-                  return DropdownMenuItem(value: status, child: Text(status));
-                }).toList(),
-                onChanged: (val) {
-                  if (val != null) setStateDialog(() => selectedStatus = val);
-                },
+              maxLines: 2,
+            ),
+            const SizedBox(height: 12),
+            
+            DropdownButtonFormField<String>(
+              initialValue: selectedStatus,
+              decoration: const InputDecoration(
+                labelText: 'Status Resep',
+                border: OutlineInputBorder(),
               ),
-              const SizedBox(height: 16),
+              items: ['Ingin Dicoba', 'Sudah Dicoba', 'Favorit'].map((status) {
+                return DropdownMenuItem(value: status, child: Text(status));
+              }).toList(),
+              onChanged: (val) {
+                if (val != null) setStateDialog(() => selectedStatus = val);
+              },
+            ),
+            const SizedBox(height: 12),
 
-              DropdownButtonFormField<String>(
-                initialValue: selectedDifficulty,
-                decoration: const InputDecoration(
-                  labelText: 'Tingkat Kesulitan',
-                  border: OutlineInputBorder(),
-                ),
-                items: ['Mudah', 'Sedang', 'Sulit'].map((diff) {
-                  return DropdownMenuItem(value: diff, child: Text(diff));
-                }).toList(),
-                onChanged: (val) {
-                  if (val != null) setStateDialog(() => selectedDifficulty = val);
-                },
+            DropdownButtonFormField<String>(
+              initialValue: selectedDifficulty,
+              decoration: const InputDecoration(
+                labelText: 'Tingkat Kesulitan',
+                border: OutlineInputBorder(),
               ),
-            ],
-          ),
+              items: ['Mudah', 'Sedang', 'Sulit'].map((diff) {
+                return DropdownMenuItem(value: diff, child: Text(diff));
+              }).toList(),
+              onChanged: (val) {
+                if (val != null) setStateDialog(() => selectedDifficulty = val);
+              },
+            ),
+          ],
         ),
         actions: [
           TextButton(
@@ -157,7 +157,7 @@ void _showEditDialog(BuildContext context, CookbookModel item) {
                 });
 
                 if (!context.mounted) return;
-                Navigator.pop(context); 
+                Navigator.pop(context);
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Resep berhasil diperbarui!')),
@@ -176,7 +176,6 @@ void _showEditDialog(BuildContext context, CookbookModel item) {
     ),
   );
 }
-
 void _showDeleteDialog(BuildContext context, CookbookModel item) {
   showDialog(
     context: context,
