@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cookbook_provider.dart';
-import '../models/cookbook_model.dart'; 
+import '../models/cookbook_model.dart';
+import '../screens/add_recipe_screen.dart'; 
 
 class CookbookScreen extends StatefulWidget {
   const CookbookScreen({super.key});
@@ -312,6 +313,17 @@ void _showDeleteDialog(BuildContext context, CookbookModel item) {
             );
           },
         ),
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: const Color.fromARGB(255, 255, 156, 43),
+            foregroundColor: Colors.white,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddRecipeScreen()),
+              );
+            },
+            child: const Icon(Icons.add),
+          ),
       );
     }
 }
